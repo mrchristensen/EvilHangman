@@ -37,13 +37,15 @@ public class HangmanTest {
     @DisplayName("Loading Empty File Test")
     void testEmptyFileLoad(){
         Assertions.assertThrows(EmptyDictionaryException.class, ()-> studentGame.startGame(new File(EMPTY_DICTIONARY), 4), "Failed to throw EmptyDictionaryException.");
+        Assertions.assertThrows(EmptyDictionaryException.class, ()-> studentGame.startGame(new File(DICTIONARY), 1), "Failed to throw EmptyDictionaryException.");
+        Assertions.assertThrows(EmptyDictionaryException.class, ()-> studentGame.startGame(new File(SMALL_DICTIONARY), 15), "Failed to throw EmptyDictionaryException.");
     }
 
     @Test
     @DisplayName("Loading File With Word Length 0 Test")
     void testWordLength0(){
         try{
-            studentGame.startGame(new File(DICTIONARY), 0);
+            Assertions.assertThrows(EmptyDictionaryException.class, ()-> studentGame.startGame(new File(DICTIONARY), 0), "Failed to throw EmptyDictionaryException.");
         }
         catch(Throwable e){
             fail("Loading file with word length 0 threw: " + e.getClass());
@@ -54,7 +56,6 @@ public class HangmanTest {
     @DisplayName("Loading File Tests")
     void testLoadFiles(){
         try{
-            studentGame.startGame(new File(DICTIONARY), 1);
             studentGame.startGame(new File(DICTIONARY), 2);
             studentGame.startGame(new File(DICTIONARY), 10);
             studentGame.startGame(new File(SMALL_DICTIONARY), 10);
@@ -110,7 +111,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 68, "Incorrect set size.");
+        assertEquals(68, possibleWords.size(), "Incorrect set size.");
         String[] correctPossibilities = {"be","bi","bo","by","de","do","ef","eh","el","em","en","er","es","et","ex","go","he","hi","hm","ho","id","if","in","is","it","jo","li","lo","me","mi","mm","mo","mu","my","ne","no","nu","od","oe","of","oh","om","on","op","or","os","ow","ox","oy","pe","pi","re","sh","si","so","ti","to","uh","um","un","up","us","ut","we","wo","xi","xu","ye"};
         assertTrue(possibleWords.containsAll(Arrays.asList(correctPossibilities)), "Incorrect set contents after 1 guess");
 
@@ -119,7 +120,7 @@ public class HangmanTest {
         }
         catch(GuessAlreadyMadeException e){
         }
-        assertEquals(possibleWords.size(), 68, "Incorrect set size after duplicate guess.");
+        assertEquals(68, possibleWords.size(), "Incorrect set size after duplicate guess.");
         assertTrue(possibleWords.containsAll(Arrays.asList(correctPossibilities)),"Incorrect set contents after duplicate guess");
 
         try{
@@ -128,7 +129,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 49, "Incorrect set size after second guess.");
+        assertEquals(49, possibleWords.size(), "Incorrect set size after second guess.");
         String[] newCorrectPossibilities = {"bi","bo","by","do","go","hi","hm","ho","id","if","in","is","it","jo","li","lo","mi","mm","mo","mu","my","no","nu","od","of","oh","om","on","op","or","os","ow","ox","oy","pi","sh","si","so","ti","to","uh","um","un","up","us","ut","wo","xi","xu"};
         assertTrue(possibleWords.containsAll(Arrays.asList(newCorrectPossibilities)),"Incorrect set contents after second guess");
     }
@@ -150,7 +151,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 665, "Incorrect size after 1 guess");
+        assertEquals(665, possibleWords.size(), "Incorrect size after 1 guess");
         assertFalse(possibleWords.toString().contains("a"), "Incorrect contents after 1 guess");
 
         try{
@@ -159,7 +160,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 456, "Incorrect size after 2nd guess");
+        assertEquals(456, possibleWords.size(), "Incorrect size after 2nd guess");
         assertFalse(possibleWords.toString().contains("o"), "Incorrect contents after 2nd guess");
 
         try{
@@ -170,7 +171,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 110, "Incorrect size after 5th guess");
+        assertEquals(110, possibleWords.size(), "Incorrect size after 5th guess");
         assertFalse(possibleWords.toString().contains("e"), "Incorrect contents after 5th guess");
         assertFalse(possibleWords.toString().contains("u"), "Incorrect contents after 5th guess");
         assertTrue(possibleWords.toString().contains("i"), "Incorrect contents after 5th guess");
@@ -196,7 +197,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 5395, "Incorrect size after 1 guess");
+        assertEquals(5395, possibleWords.size(), "Incorrect size after 1 guess");
         assertFalse(possibleWords.toString().contains("t"), "Incorrect contents after 1 guess");
 
         try{
@@ -205,7 +206,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 1091, "Incorrect size after 2nd guess");
+        assertEquals(1091, possibleWords.size(), "Incorrect size after 2nd guess");
         assertTrue(possibleWords.contains("airmailing"), "Incorrect contents after 2nd guess");
         assertTrue(possibleWords.contains("micrograms"), "Incorrect contents after 2nd guess");
         assertTrue(possibleWords.contains("signalling"), "Incorrect contents after 2nd guess");
@@ -220,7 +221,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 24, "Incorrect size after 6th guess");
+        assertEquals(24, possibleWords.size(), "Incorrect size after 6th guess");
         assertFalse(possibleWords.toString().contains("a"), "Incorrect contents after 6th guess");
         assertTrue(possibleWords.contains("conglobing"), "Incorrect contents after 6th guess");
         assertTrue(possibleWords.contains("flummoxing"), "Incorrect contents after 6th guess");
@@ -235,7 +236,7 @@ public class HangmanTest {
         catch(Throwable e){
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 1, "Incorrect size after 10th guess");
+        assertEquals(1, possibleWords.size(), "Incorrect size after 10th guess");
         assertTrue(possibleWords.contains("hobnobbing"), "Incorrect contents after 10th guess");
     }
 
@@ -255,7 +256,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 5, "Incorrect size after 1 guess");
+        assertEquals(5, possibleWords.size(), "Incorrect size after 1 guess");
         assertFalse(possibleWords.contains("chubby"), "Incorrect contents after 1 guess");
 
         try {
@@ -263,7 +264,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 3, "Incorrect size after 2nd guess");
+        assertEquals(3, possibleWords.size(), "Incorrect size after 2nd guess");
         assertFalse(possibleWords.contains("little"), "Incorrect contents after 2nd guess");
         assertFalse(possibleWords.contains("nickle"), "Incorrect contents after 2nd guess");
 
@@ -272,7 +273,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect size after 3rd guess");
+        assertEquals(2, possibleWords.size(), "Incorrect size after 3rd guess");
         assertFalse(possibleWords.contains("editor"), "Incorrect contents after 3rd guess");
         assertTrue(possibleWords.contains("brakes"), "Incorrect contents after 3rd guess");
         assertTrue(possibleWords.contains("chicks"), "Incorrect contents after 3rd guess");
@@ -294,7 +295,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 4, "Incorrect size after 1 guess");
+        assertEquals(4, possibleWords.size(), "Incorrect size after 1 guess");
         assertFalse(possibleWords.contains("lambs"), "Incorrect contents after 1 guess");
         assertFalse(possibleWords.contains("lakes"), "Incorrect contents after 1 guess");
         assertTrue(possibleWords.contains("toner"), "Incorrect contents after 1 guess");
@@ -304,7 +305,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect size after 2nd guess");
+        assertEquals(2, possibleWords.size(), "Incorrect size after 2nd guess");
         assertFalse(possibleWords.contains("tombs"), "Incorrect contents after 2nd guess");
         assertFalse(possibleWords.contains("toner"), "Incorrect contents after 2nd guess");
         assertTrue(possibleWords.contains("title"), "Incorrect contents after 2nd guess");
@@ -315,7 +316,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 1, "Incorrect size after 3rd guess");
+        assertEquals(1, possibleWords.size(), "Incorrect size after 3rd guess");
         assertFalse(possibleWords.contains("title"), "Incorrect contents after 3rd guess");
         assertTrue(possibleWords.contains("silly"), "Incorrect contents after 3rd guess");
     }
@@ -336,7 +337,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect size after 1 guess");
+        assertEquals(2, possibleWords.size(), "Incorrect size after 1 guess");
         assertFalse(possibleWords.contains("zyzzyva"), "Incorrect contents after 1 guess");
         assertFalse(possibleWords.contains("zizzled"), "Incorrect contents after 1 guess");
         assertTrue(possibleWords.contains("buzzwig"), "Incorrect contents after 1 guess");
@@ -355,7 +356,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 4, "Incorrect size after 1 guess");
+        assertEquals(4, possibleWords.size(), "Incorrect size after 1 guess");
         assertFalse(possibleWords.contains("bythelee"), "Incorrect contents after 1 guess");
         assertFalse(possibleWords.contains("dronebee"), "Incorrect contents after 1 guess");
         assertFalse(possibleWords.contains("parmelee"), "Incorrect contents after 1 guess");
@@ -382,7 +383,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect word count after 1st guess.");
+        assertEquals(2, possibleWords.size(), "Incorrect word count after 1st guess.");
         assertFalse(possibleWords.contains("abs"), "Incorrect content after 1st guess.");
         assertFalse(possibleWords.contains("are"), "Incorrect content after 1st guess.");
         assertFalse(possibleWords.contains("bar"), "Incorrect content after 1st guess.");
@@ -403,7 +404,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect word count after 1st guess.");
+        assertEquals(2, possibleWords.size(), "Incorrect word count after 1st guess.");
         assertFalse(possibleWords.contains("charmillions"), "Incorrect content after 1st guess.");
         assertFalse(possibleWords.contains("phylogenesis"), "Incorrect content after 1st guess.");
         assertTrue(possibleWords.contains("antimonarchy"), "Incorrect content after 1st guess.");
@@ -426,7 +427,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect word count after 1st guess");
+        assertEquals(2, possibleWords.size(), "Incorrect word count after 1st guess");
         assertFalse(possibleWords.contains("huggingly"), "Incorrect contents after 1st guess");
         assertFalse(possibleWords.contains("legginged"), "Incorrect contents after 1st guess");
         assertFalse(possibleWords.contains("dugogogue"), "Incorrect contents after 1st guess");
@@ -447,7 +448,7 @@ public class HangmanTest {
         } catch (Throwable e) {
             fail("Making a guess threw: " + e.getClass());
         }
-        assertEquals(possibleWords.size(), 2, "Incorrect word count after 1st guess");
+        assertEquals(2, possibleWords.size(), "Incorrect word count after 1st guess");
         assertFalse(possibleWords.contains("thelittleo"), "Incorrect contents after 1st guess");
         assertFalse(possibleWords.contains("teakettles"), "Incorrect contents after 1st guess");
         assertFalse(possibleWords.contains("titeration"), "Incorrect contents after 1st guess");
