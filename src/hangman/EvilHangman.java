@@ -9,7 +9,7 @@ import java.util.SortedSet;
 
 public class EvilHangman {
 
-    public static void main(String[] args) throws IOException, EmptyDictionaryException, GuessAlreadyMadeException {
+    public static void main(String[] args) throws IOException, EmptyDictionaryException{
 
         if(args.length < 3){
             throw new IllegalArgumentException("Three arguments are required.");
@@ -34,13 +34,20 @@ public class EvilHangman {
             }
             System.out.printf("\b\nWord: %s\nEnter guess: ", myWord);
 
-            char[] tempGuess = input.next().toLowerCase().toCharArray(); //Input
+            //char[] tempGuess = input.next().toLowerCase().toCharArray(); //Input
+            String tempGuess = input.next().toLowerCase();
 
-            if(tempGuess.length != 1){
-                //TODO: Throw excpetion: invalid entry for a guess (needs to be just one character)
+            if(tempGuess == null || tempGuess.length() != 1 || !tempGuess.matches("^[a-z]*$")){ //Checks to see if alpha
+                System.out.printf("Invalid Input\n");
+                continue;
             }
 
-            Set<String> newSet = myGame.makeGuess(tempGuess[0]);
+            try {
+                Set<String> newSet = myGame.makeGuess(tempGuess.toCharArray()[0]);
+            } catch (GuessAlreadyMadeException e) {
+                System.out.printf("You already used that letter\n");
+                continue;
+            }
 
         }
     }
