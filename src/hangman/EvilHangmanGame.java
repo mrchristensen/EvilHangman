@@ -2,10 +2,14 @@ package hangman;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.SortedSet;
 
 public class EvilHangmanGame implements IEvilHangmanGame {
+    private Set<String> myDictionary = new HashSet<>();
+    private Set<Character> guessedLetters = new HashSet<>();
     /**
      * Starts a new game of evil hangman using words from <code>dictionary</code>
      * with length <code>wordLength</code>.
@@ -21,6 +25,23 @@ public class EvilHangmanGame implements IEvilHangmanGame {
      */
     @Override
     public void startGame(File dictionary, int wordLength) throws IOException, EmptyDictionaryException {
+        if(dictionary.exists() == false){
+            throw new IOException();
+        }
+
+        Scanner scanner = new Scanner(dictionary);
+
+        while(scanner.hasNext()){
+            String tempWord = scanner.next().toLowerCase(); //Sanitize input (all lower case)
+
+            if(tempWord.length() == wordLength){ //If the word we're looking at it the right length add it to the set
+                myDictionary.add(tempWord);
+            }
+        }
+
+        if(myDictionary.size() == 0){
+            throw new EmptyDictionaryException();
+        }
 
     }
 
