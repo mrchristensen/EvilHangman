@@ -2,14 +2,12 @@ package hangman;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.SortedSet;
+import java.util.*;
 
 public class EvilHangmanGame implements IEvilHangmanGame {
     private Set<String> myDictionary = new HashSet<>();
-    private Set<Character> guessedLetters = new HashSet<>();
+    private SortedSet<Character> guessedLetters = new TreeSet<>();
+
     /**
      * Starts a new game of evil hangman using words from <code>dictionary</code>
      * with length <code>wordLength</code>.
@@ -57,7 +55,17 @@ public class EvilHangmanGame implements IEvilHangmanGame {
      */
     @Override
     public Set<String> makeGuess(char guess) throws GuessAlreadyMadeException {
-        return null;
+
+        //Check to see if we've already guess the letter
+        if(guessedLetters.contains(guess)){
+            throw new GuessAlreadyMadeException();
+        }
+
+        guessedLetters.add(guess);
+
+
+
+        return myDictionary;
     }
 
     /**
@@ -67,6 +75,6 @@ public class EvilHangmanGame implements IEvilHangmanGame {
      */
     @Override
     public SortedSet<Character> getGuessedLetters() {
-        return null;
+        return guessedLetters;
     }
 }
