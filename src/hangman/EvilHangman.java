@@ -23,6 +23,7 @@ public class EvilHangman {
         Scanner input = new Scanner(System.in);
         String myWord = generateWord(wordLength);
         Set<String> oldSet = new HashSet<>();
+        Set<String> newSet;
 
         myGame.startGame(myDictionary, wordLength);
 
@@ -43,13 +44,14 @@ public class EvilHangman {
             }
 
             try {
-                Set<String> newSet = myGame.makeGuess(tempGuess.toCharArray()[0]);
+                newSet = myGame.makeGuess(tempGuess.toCharArray()[0]);
             } catch (GuessAlreadyMadeException e) {
                 System.out.printf("You already used that letter\n");
                 continue;
             }
 
         }
+
     }
 
     private static String generateWord(int wordLength){

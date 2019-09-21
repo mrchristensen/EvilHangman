@@ -33,6 +33,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             String tempWord = scanner.next().toLowerCase(); //Sanitize input (all lower case)
 
             if(tempWord.length() == wordLength){ //If the word we're looking at it the right length add it to the set
+                System.out.println(tempWord);
                 myDictionary.add(tempWord);
             }
         }
@@ -62,6 +63,8 @@ public class EvilHangmanGame implements IEvilHangmanGame {
         }
 
         guessedLetters.add(guess);
+
+        myDictionary = new Partitioner().partition(myDictionary, guess);
 
 
 
