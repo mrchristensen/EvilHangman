@@ -138,7 +138,7 @@ public class Partitioner {
             return mySet;
         }
         else{
-            return findRightMostSet(mySet, c, largestIndex - 1); //TODO: Make sure that this ' - 1' need to be here
+            return findRightMostSet(mySet, c, largestIndex);
         }
 
     }
