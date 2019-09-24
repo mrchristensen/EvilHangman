@@ -37,9 +37,9 @@ public class EvilHangman {
             myWord = myGame.getWordTemplate();
             System.out.printf("\b\nWord: %s\nEnter guess: ", myWord);
 
-            //char[] tempGuess = input.next().toLowerCase().toCharArray(); //Input
-            String tempGuess = input.next().toLowerCase();
+            String tempGuess = input.next();
 
+            //Check for invalid input
             if(tempGuess == null || tempGuess.length() != 1 || !tempGuess.matches("^[a-z]*$")){ //Checks to see if alpha
                 System.out.printf("Invalid Input\n");
                 continue;
@@ -62,14 +62,21 @@ public class EvilHangman {
                 System.out.printf("Yes, there is %d %s\n", i, tempGuess);
             }
 
+            if(!myGame.getWordTemplate().contains("-")){
+                System.out.printf("You win! %s", myGame.getWordTemplate());
+                break;
+            }
+            if(numGuesses == 0){
+                System.out.printf("You lose!\nThe word was: %s", "%%%Pineapples");
+                break;
+            }
+
             myWord = myGame.getWordTemplate();
             oldSet.clear();
             oldSet.addAll(newSet);
 
         }
-        if(numGuesses == 0){
-            System.out.printf("You lose!\nThe word was: %s", "%%%Pineapples");
-        }
+
 
     }
 
