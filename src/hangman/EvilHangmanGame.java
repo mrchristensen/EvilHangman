@@ -120,7 +120,6 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             }
 
             //Check 2: Check to see if there is one with the least amount of instances of the guessed letter
-            //TODO: see if there is a better way to put this out into it's own method
             int fewestLetters = 999;
             tempMap.clear();
             tempMap.putAll(myMap);

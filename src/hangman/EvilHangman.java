@@ -37,7 +37,7 @@ public class EvilHangman {
             myWord = myGame.getWordTemplate();
             System.out.printf("\b\nWord: %s\nEnter guess: ", myWord);
 
-            String tempGuess = input.next();
+            String tempGuess = input.nextLine();
 
             //Check for invalid input
             if(tempGuess == null || tempGuess.length() != 1 || !tempGuess.matches("^[a-z]*$")){ //Checks to see if alpha
