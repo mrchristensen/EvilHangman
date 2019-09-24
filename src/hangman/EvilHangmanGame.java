@@ -29,7 +29,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             String tempWord = scanner.next().toLowerCase(); //Sanitize input (all lower case)
 
             if(tempWord.length() == wordLength){ //If the word we're looking at it the right length add it to the set
-                System.out.println(tempWord);
+                //System.out.println(tempWord);
                 myDictionary.add(tempWord);
             }
         }
@@ -98,20 +98,20 @@ public class EvilHangmanGame implements IEvilHangmanGame {
         }
 
         if (myMap.size() == 1) { //Now that we have only the sets with the most words
-            System.out.println("Only one: " + myMap);
+            //System.out.println("Only one: " + myMap);
             templatedWord = myMap.keySet().iterator().next();
             myDictionary.clear();
             myDictionary.addAll(myMap.values().iterator().next());
             return myDictionary;
         } else {
-            System.out.println("More than one");
+            //System.out.println("More than one");
 
             //Check 1: See if there a set where the letter doesn't appear and choose that one
             for (Map.Entry<String, Set<String>> entry : myMap.entrySet()) {
                 if (containsGuessedLetter(entry.getValue(), guessedLetter) == false) {
                     myMap.clear();
                     myMap.put(entry.getKey(), entry.getValue());
-                    System.out.println("Found a collection, among the largest, that doesn't contain the guessed letter\n" + myMap);
+                    //System.out.println("Found a collection, among the largest, that doesn't contain the guessed letter\n" + myMap);
                     templatedWord = myMap.keySet().iterator().next();
                     myDictionary.clear();
                     myDictionary.addAll(myMap.values().iterator().next());
@@ -136,11 +136,11 @@ public class EvilHangmanGame implements IEvilHangmanGame {
                 int i = s.length() - s.replaceAll(Character.toString(guessedLetter), "").length();
                 if (i > fewestLetters) {
                     myMap.remove(entry.getKey(), entry.getValue());
-                    System.out.println("Should've removed this entry:" + entry + ", so here's the map: " + myMap);
+                    //System.out.println("Should've removed this entry:" + entry + ", so here's the map: " + myMap);
                 }
             }
             if (myMap.size() == 1) {
-                System.out.println("Found a system with the least instances of the guessed letter: " + myMap);
+                //System.out.println("Found a system with the least instances of the guessed letter: " + myMap);
                 templatedWord = myMap.keySet().iterator().next();
                 myDictionary.clear();
                 myDictionary.addAll(myMap.values().iterator().next());
@@ -150,7 +150,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             //Check 3: Choose the one with the rightmost guessed letter (repeat till a group is chosen)
             findRightMostSet(myMap, guessedLetter);
 
-            System.out.println("Found a system with the furthest right instance of the guessed letter: " + myMap);
+            //System.out.println("Found a system with the furthest right instance of the guessed letter: " + myMap);
             templatedWord = myMap.keySet().iterator().next();
             myDictionary.clear();
             myDictionary.addAll(myMap.values().iterator().next());
@@ -216,7 +216,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             if (myMap.size() == 1) {
                 return;
             } else {
-                System.out.println("Another loop is requires.  Map currently: " + myMap);
+                //System.out.println("Another loop is requires.  Map currently: " + myMap);
                 furthestIndex = 0;
                 tempMap.clear();
                 tempMap.putAll(myMap);

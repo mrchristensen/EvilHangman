@@ -54,12 +54,12 @@ public class EvilHangman {
 
             //Check to see if we guessed a word
             if (myWord.equals(myGame.getWordTemplate())){
-                System.out.printf("Sorry, there are no %s's\n", tempGuess);
+                System.out.printf("Sorry, there are no %s's\n\n", tempGuess);
                 numGuesses--;
             }
             else{
                 int i = myGame.getWordTemplate().length() - myGame.getWordTemplate().replaceAll(tempGuess, "").length();
-                System.out.printf("Yes, there is %d %s\n", i, tempGuess);
+                System.out.printf("Yes, there is %d %s\n\n", i, tempGuess);
             }
 
             if(!myGame.getWordTemplate().contains("-")){
@@ -67,7 +67,7 @@ public class EvilHangman {
                 break;
             }
             if(numGuesses == 0){
-                System.out.printf("You lose!\nThe word was: %s", "%%%Pineapples");
+                System.out.printf("You lose!\nThe word was: %s", newSet.iterator().next());
                 break;
             }
 
