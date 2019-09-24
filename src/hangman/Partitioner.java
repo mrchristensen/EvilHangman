@@ -1,99 +1,111 @@
 package hangman;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Partitioner {
+
+    private String templatedWord = "";
+    private SortedSet<Character> guessedLetters = new TreeSet<>();
 
     public Set<String> partition(Set<String> originalSet, char letter) {
         Map<String, Set<String>> myMap = new HashMap<>();
 
-        //Generate and populate map with keys (word forms) and values (sets of possible words)
-        for (String word : originalSet) {
-            String tempKey = "";
+        guessedLetters.add(letter);
 
-            for (int i = 0; i < word.length(); i++) {
-                if (word.toCharArray()[i] == letter) {
-                    tempKey += letter;
-                } else {
-                    tempKey += "-";
+        //Generate and populate map with keys (word forms) and values (sets of possible words)
+        if (myMap.size() == 0) {
+
+            for (String word : originalSet) {
+                String tempKey = "";
+
+                for (int i = 0; i < word.length(); i++) {
+                    if (word.toCharArray()[i] == letter) {
+                        tempKey += letter;
+                    } else {
+                        tempKey += "-";
+                    }
+
                 }
 
+                if (myMap.get(tempKey) == null) {
+                    myMap.put(tempKey, new HashSet<>());
+                }
+                myMap.get(tempKey).add(word);
             }
+        }
+        else{
+            Map<String, Set<String>> tempMap = new HashMap<>();
+            tempMap.putAll(myMap);
 
-            if (myMap.get(tempKey) == null) {
-                myMap.put(tempKey, new HashSet<>());
+            for (Map.Entry<String, Set<String>> stringSetEntry : tempMap.entrySet()) {
+                
             }
-            myMap.get(tempKey).add(word);
         }
 
+
         //Find which set is the biggest
+        Map<String, Set<String>> tempMap = new HashMap<>();
+
+
         int biggestSize = 0;
-        Set<Set<String>> biggestCollections = new HashSet<>();
         for (Set<String> collection : myMap.values()) {
             if (collection.size() > biggestSize) {
                 biggestSize = collection.size();
-                biggestCollections.clear();
             }
-            if (collection.size() == biggestSize) {
-                biggestCollections.add(collection);
+        }
+        for (Map.Entry<String, Set<String>> entry : myMap.entrySet()) {
+            if (entry.getValue().size() > biggestSize) {
+                myMap.remove(entry);
             }
         }
 
-        System.out.println(biggestCollections);
 
-        if (biggestCollections.size() == 1) { //Now that we have only the sets with the most words
-            System.out.println("Only one");
-            return biggestCollections.iterator().next();
+        if (myMap.size() == 1) { //Now that we have only the sets with the most words
+            System.out.println("Only one: " + myMap);
+            return myMap.values().iterator().next();
         } else {
             System.out.println("More than one");
 
             //Check 1: See if there a set where the letter doesn't appear and choose that one
-            for (Set<String> collection : biggestCollections) {
-                if (containsGuessedLetter(collection, letter) == false) {
-                    System.out.println("Found a collection, among the largest, that doesn't contain the guessed letter\n" + collection.toString());
-                    return collection;
+            for (Map.Entry<String, Set<String>> entry : myMap.entrySet()) {
+                if (containsGuessedLetter(entry.getValue(), letter) == false) {
+                    myMap.clear();
+                    myMap.put(entry.getKey(), entry.getValue());
+                    System.out.println("Found a collection, among the largest, that doesn't contain the guessed letter\n" + myMap);
+                    return myMap.values().iterator().next();
                 }
             }
 
             //Check 2: Check to see if there is one with the least amount of instances of the guessed letter
             //TODO: see if there is a better way to put this out into it's own method
             int fewestLetters = 999;
-            Set<Set<String>> temp = new HashSet<>();
-            temp.addAll(biggestCollections);
-            for (Set<String> collection : temp) {
-                String s = collection.iterator().next();
+            tempMap.clear();
+            tempMap.putAll(myMap);
+            for (Set<String> mySet : myMap.values()) {
+                String s = mySet.iterator().next();
                 int i = s.length() - s.replaceAll(Character.toString(letter), "").length();
                 if (i < fewestLetters) {
-                    biggestCollections.clear();
                     fewestLetters = i;
                 }
-                if (i == fewestLetters) {
-                    biggestCollections.add(collection);
+            }
+            for (Map.Entry<String, Set<String>> entry : tempMap.entrySet()) {
+                String s = entry.getValue().iterator().next();
+                int i = s.length() - s.replaceAll(Character.toString(letter), "").length();
+                if (i > fewestLetters) {
+                    myMap.remove(entry.getKey(), entry.getValue());
+                    System.out.println("Should've removed this entry:" + entry + ", so here's the map: " + myMap);
                 }
             }
-            if (biggestCollections.size() == 1) {
-                System.out.println("Found a system with the least instances of the guessed letter: " + biggestCollections.toString());
-                return biggestCollections.iterator().next();
+            if (myMap.size() == 1) {
+                System.out.println("Found a system with the least instances of the guessed letter: " + myMap);
+                return myMap.values().iterator().next();
             }
 
-            //TODO: Choose the one with the rightmost guessed letter (repeat till a group is chosen)
-            while (biggestCollections.size() != 1) {
-                biggestCollections = findRightMostSet(biggestCollections, letter, biggestCollections.iterator().next().iterator().next().length()); //Todo: make this not horrible
-            }
+            //Check 3: Choose the one with the rightmost guessed letter (repeat till a group is chosen)
+            findRightMostSet(myMap, letter);
 
-            if (biggestCollections.size() == 1) {
-                System.out.println("Found a system with the furthest right instance of the guessed letter: " + biggestCollections.toString());
-                return biggestCollections.iterator().next();
-            } else {
-
-
-            }
-
-
-            return null; //TODO: get rid of this
+            System.out.println("Found a system with the furthest right instance of the guessed letter: " + myMap);
+            return myMap.values().iterator().next();
 
         }
     }
@@ -116,31 +128,53 @@ public class Partitioner {
         return 0;
     }
 
-    private Set<Set<String>> findRightMostSet(Set<Set<String>> mySet, char c, int substringIndex){
-        Set<Set<String>> temp = new HashSet<>();
-        temp.addAll(mySet);
-        mySet.clear();
+    private void findRightMostSet(Map<String, Set<String>> myMap, char c) {
 
-        int largestIndex = 0;
-        for (Set<String> set : temp) {
-            String s = set.iterator().next();
-            int i = findIndex(s.substring(0, substringIndex), c);
-            if(i > largestIndex){
-                mySet.clear();
-                largestIndex = i;
-            }
-            if(i == largestIndex){
-                mySet.add(set);
-            }
-        }
+        Map<String, Set<String>> tempMap = new HashMap<>();
+        tempMap.clear();
+        tempMap.putAll(myMap);
+        myMap.clear();
 
-        if(mySet.size() == 1){
-            return mySet;
-        }
-        else{
-            return findRightMostSet(mySet, c, largestIndex);
+        int furthestIndex = 0;
+
+        //System.out.printf("The totaly length of the word: %d\n", tempMap.values().iterator().next().iterator().next().length() - 1);
+        int temp = tempMap.values().iterator().next().iterator().next().length() - 1;
+        for (int i = temp; i > 0; i--) {
+
+            for (Map.Entry<String, Set<String>> entry : tempMap.entrySet()) {
+                int tempFurthest = entry.getValue().iterator().next().lastIndexOf(c, i);
+                if (tempFurthest > furthestIndex) {
+                    furthestIndex = tempFurthest;
+                    myMap.clear();
+                }
+                if (tempFurthest == furthestIndex) {
+                    myMap.put(entry.getKey(), entry.getValue());
+                }
+
+            }
+
+            if (myMap.size() == 1) {
+                return;
+            } else {
+                System.out.println("Another loop is requires.  Map currently: " + myMap);
+                furthestIndex = 0;
+                tempMap.clear();
+                tempMap.putAll(myMap);
+                myMap.clear();
+            }
+
         }
 
     }
+
+    public String getWordTemplate() {
+//        if (myMap.isEmpty()) {
+//            return null;
+//        }
+//        return myMap.keySet().iterator().next().toString();
+        return templatedWord;
+    }
+
+
 
 }

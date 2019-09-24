@@ -21,7 +21,7 @@ public class EvilHangman {
         File myDictionary = new File(dictionaryFilename);
         EvilHangmanGame myGame = new EvilHangmanGame();
         Scanner input = new Scanner(System.in);
-        String myWord = generateWord(wordLength);
+        String myWord;
         Set<String> oldSet = new HashSet<>();
         Set<String> newSet;
 
@@ -33,6 +33,8 @@ public class EvilHangman {
             for (Character letter : guessedLetters) {
                 System.out.print(letter + " ");
             }
+
+            myWord = myGame.getWordTemplate();
             System.out.printf("\b\nWord: %s\nEnter guess: ", myWord);
 
             //char[] tempGuess = input.next().toLowerCase().toCharArray(); //Input
@@ -44,22 +46,31 @@ public class EvilHangman {
             }
 
             try {
-                newSet = myGame.makeGuess(tempGuess.toCharArray()[0]);
+                newSet = myGame.makeGuess(tempGuess.charAt(0));
             } catch (GuessAlreadyMadeException e) {
                 System.out.printf("You already used that letter\n");
                 continue;
             }
 
+            //Check to see if we guessed a word
+            if (myWord.equals(myGame.getWordTemplate())){
+                System.out.printf("Sorry, there are no %s's\n", tempGuess);
+                numGuesses--;
+            }
+            else{
+                int i = myGame.getWordTemplate().length() - myGame.getWordTemplate().replaceAll(tempGuess, "").length();
+                System.out.printf("Yes, there is %d %s\n", i, tempGuess);
+            }
+
+            myWord = myGame.getWordTemplate();
+            oldSet.clear();
+            oldSet.addAll(newSet);
+
+        }
+        if(numGuesses == 0){
+            System.out.printf("You lose!\nThe word was: %s", "%%%Pineapples");
         }
 
-    }
-
-    private static String generateWord(int wordLength){
-        String word = "";
-        for (int i = 0; i < wordLength; i++) {
-            word += "-";
-        }
-        return word;
     }
 
 }
