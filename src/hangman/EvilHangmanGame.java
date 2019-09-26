@@ -43,6 +43,8 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             templatedWord += "-";
         }
 
+        //templatedWord = new String(new char[wordLength]).replace('\0', '-');
+
     }
 
     @Override
@@ -125,7 +127,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
             tempMap.putAll(myMap);
             for (Set<String> mySet : myMap.values()) {
                 String s = mySet.iterator().next();
-                int i = s.length() - s.replaceAll(Character.toString(guessedLetter), "").length();
+                int i = s.length() - s.replace(Character.toString(guessedLetter), "").length();
                 if (i < fewestLetters) {
                     fewestLetters = i;
                 }
@@ -196,7 +198,7 @@ public class EvilHangmanGame implements IEvilHangmanGame {
 
         int furthestIndex = 0;
 
-        //System.out.printf("The totaly length of the word: %d\n", tempMap.values().iterator().next().iterator().next().length() - 1);
+        //System.out.printf("The totally length of the word: %d\n", tempMap.values().iterator().next().iterator().next().length() - 1);
         int temp = tempMap.values().iterator().next().iterator().next().length() - 1;
         for (int i = temp; i > 0; i--) {
 
