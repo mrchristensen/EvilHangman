@@ -40,7 +40,7 @@ public class EvilHangman {
             String tempGuess = input.nextLine();
 
             //Check for invalid input
-            if(tempGuess == null || tempGuess.length() != 1 || !tempGuess.matches("^[a-z]*$")){ //Checks to see if alpha
+            if(tempGuess == null || tempGuess.length() != 1 || !Character.isAlphabetic(tempGuess.charAt(0))){ //Checks to see if alpha
                 System.out.printf("Invalid Input\n");
                 continue;
             }
@@ -67,7 +67,7 @@ public class EvilHangman {
                 break;
             }
             if(numGuesses == 0){
-                System.out.printf("You lose!\nThe word was: %s", newSet.iterator().next());
+                System.out.printf("You lose!\nThe word was: %s\n", newSet.iterator().next());
                 break;
             }
 
